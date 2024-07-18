@@ -1,29 +1,14 @@
-import requests
-from bs4 import BeautifulSoup
+#!/bin/bash
 
-def get_manual_section(section_id):
-    url = f"https://buildroot.org/manual/manual.html#{section_id}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.text
-    return None
+# Fetch the entire Buildroot manual
+curl -s https://buildroot.org/downloads/manual/manual.html -o manual.html
 
-def parse_manual_section(html_content):
-    soup = BeautifulSoup(html_content, 'html.parser')
-    section = soup.find(id=section_id)
-    if section:
-        return section.get_text()
-    return None
+# Extract and summarize relevant sections
+# Example: using `lynx` to convert HTML to text and then summarize using a simple script
+lynx -dump -nolist manual.html > manual.txt
 
-def teach_buildroot_steps(section_id):
-    html_content = get_manual_section(section_id)
-    if html_content:
-        steps = parse_manual_section(html_content)
-        if steps:
-            return steps
-    return "Unable to fetch or parse the Buildroot manual section."
+# Simple summarization (this can be more sophisticated)
+head -n 500 manual.txt > summary.txt
 
-# Example usage
-section_id = "customizing-config"
-steps = teach_buildroot_steps(section_id)
-print(steps)
+# Output the summarized content
+cat summary.txt

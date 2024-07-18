@@ -1,13 +1,15 @@
 #!/bin/bash
 
+# Install necessary tools if not already installed
+if ! command -v lynx &> /dev/null; then
+    sudo apt-get update && sudo apt-get install -y lynx
+fi
+
 # Fetch the entire Buildroot manual
 curl -s https://buildroot.org/downloads/manual/manual.html -o manual.html
 
-# Extract and summarize relevant sections
-# Example: using `lynx` to convert HTML to text and then summarize using a simple script
+# Convert HTML to plain text and summarize
 lynx -dump -nolist manual.html > manual.txt
-
-# Simple summarization (this can be more sophisticated)
 head -n 500 manual.txt > summary.txt
 
 # Output the summarized content
